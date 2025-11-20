@@ -79,7 +79,7 @@ rsvpForm.addEventListener('submit', async (e)=>{
     lastSubmit = now;
 
     // send to Google Apps Script - replace URL in code before deploy
-    const scriptURL = 'PASTE_GOOGLE_APPS_SCRIPT_URL_HERE';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwR2XH2mHQt4IblHQbNZsXoSSdp8ZyzsPxh2H6ULfzNU2rZVJDSmcVBW6oG8QJ7KgTF/exec';
 
     const fd = new FormData();
     fd.append('timestamp', new Date().toISOString());

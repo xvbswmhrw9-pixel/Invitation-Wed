@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mulki & Sarah — Undangan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- OPENING (portrait small photo) -->
+  <div id="opening" class="opening">
+    <div class="opening-inner">
+      <div class="opening-photo">
+        <img src="assets/placeholder.svg" alt="Photo Mulki & Sarah">
+      </div>
+      <h1 class="opening-name">Mulki & Sarah</h1>
+      <p class="opening-date">25 Januari 2026</p>
+      <button id="openBtn" class="open-btn">Buka Undangan</button>
+    </div>
+  </div>
+
+  <!-- MAIN (white minimalist, full-bleed) -->
+  <main id="main" class="hidden">
+    <header class="hero">
+      <div class="hero-inner">
+        <h1 class="hero-title">Mulki &amp; Sarah</h1>
+        <p class="hero-sub">Kami mengundang Anda untuk hadir pada hari bahagia kami</p>
+      </div>
+    </header>
+
+    <section class="section container">
+      <div class="card">
+        <h2 class="section-title">Detail Acara</h2>
+        <div class="event">
+          <p class="muted">Akad Nikah</p>
+          <p class="time">25 Januari 2026 — 07:00 WIB</p>
+
+          <p class="muted" style="margin-top:18px">Resepsi</p>
+          <p class="time">11:00 — 14:00 WIB</p>
+
+          <p class="muted" style="margin-top:18px">Lokasi</p>
+          <p class="time">Gedung Joglo SKI — Bogor, Jawa Barat</p>
+
+          <div class="map">
+            <iframe src="https://www.google.com/maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:32px">
+        <h2 class="section-title">Galeri</h2>
+        <div class="gallery">
+          <img src="assets/placeholder.svg" alt="gallery1">
+          <img src="assets/placeholder.svg" alt="gallery2">
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:32px; text-align:center">
+        <h2 class="section-title">RSVP</h2>
+        <p class="muted">Silakan konfirmasi kehadiran Anda melalui form berikut (popup).</p>
+        <button id="openRsvp" class="rsvp-btn">Buka Form RSVP</button>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      © Mulki & Sarah — 2026
+    </footer>
+  </main>
+
+  <!-- RSVP POPUP (medium) -->
+  <div id="rsvpPopup" class="popup" aria-hidden="true">
+    <div class="popup-inner" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+      <button id="closeRsvp" class="popup-close" aria-label="Tutup">&times;</button>
+      <h3 id="rsvpTitle">Konfirmasi Kehadiran</h3>
+
+      <form id="rsvpForm" class="rsvp-form" autocomplete="off">
+        <!-- Honeypot -->
+        <input type="text" name="hp" id="hp" class="hp" tabindex="-1" autocomplete="off">
+
+        <!-- Anti-refresh token -->
+        <input type="hidden" name="token" id="token">
+
+        <label for="name">Nama lengkap</label>
+        <input id="name" name="name" type="text" required>
+
+        <label for="guests">Jumlah tamu</label>
+        <input id="guests" name="guests" type="number" min="1" required>
+
+        <label for="status">Status kehadiran</label>
+        <select id="status" name="status" required>
+          <option value="Hadir">Hadir</option>
+          <option value="Tidak Hadir">Tidak Hadir</option>
+        </select>
+
+        <div class="form-actions">
+          <button type="submit" id="submitBtn" class="submit">Kirim</button>
+        </div>
+
+        <p id="formError" class="form-error" role="alert" aria-live="assertive"></p>
+        <p id="formSuccess" class="form-success" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

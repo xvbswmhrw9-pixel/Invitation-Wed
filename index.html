@@ -1,108 +1,372 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mulki & Sarah — Undangan</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mulki & Sarah - Undangan Pernikahan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --maroon-dark: #1a0004;
+      --maroon: #3b0010;
+      --text-light: #f7eaea;
+      --gold: #e9d6b0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--maroon-dark);
+      color: var(--text-light);
+      line-height: 1.7;
+      letter-spacing: 0.3px;
+    }
+
+    /* === SUPER PREMIUM MINIMALIST OPENING (PORTRAIT) === */
+    .opening {
+      position: fixed;
+      inset: 0;
+      background: var(--maroon-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 9999;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .opening-portrait {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 25px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.09);
+      opacity: 0;
+      animation: fadeUp 1.6s ease forwards;
+    }
+    .opening-portrait img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .opening h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin: 0;
+      opacity: 0;
+      animation: fadeUp 1.9s ease forwards;
+    }
+
+    .opening p {
+      margin-top: 6px;
+      font-size: 15px;
+      opacity: 0.8;
+      opacity: 0;
+      animation: fadeUp 2.2s ease forwards;
+    }
+
+    .btn-open {
+      margin-top: 30px;
+      padding: 11px 32px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(6px);
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s ease;
+      opacity: 0;
+      animation: fadeUp 2.4s ease forwards;
+    }
+
+    .btn-open:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* === MAIN SECTION === */
+    .container {
+      padding: 80px 22px;
+      max-width: 680px;
+      margin: auto;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    .title-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 15px;
+      opacity: 0.7;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(4px);
+    }
+
+    .event p {
+      margin: 4px 0;
+      text-align: center;
+    }
+
+    .map iframe {
+      width: 100%;
+      height: 220px;
+      border-radius: 12px;
+      border: none;
+      margin-top: 20px;
+    }
+
+    /* === GALLERY GRID === */
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 0;
+      opacity: 0.5;
+      font-size: 13px;
+    }
+    /* RSVP Animation */
+    #rsvpModal{opacity:0;transition:opacity .4s ease;pointer-events:none;}
+    #rsvpModal.show{opacity:1;pointer-events:auto;}
+    .rsvp-box{transform:translateY(20px);opacity:0;transition:.4s ease;}
+    #rsvpModal.show .rsvp-box{transform:translateY(0);opacity:1;}
+  </style>
+
+  <script>
+    function openRSVP(){
+      const modal=document.getElementById('rsvpModal');
+      modal.classList.add('show');
+    }
+    function closeRSVP(){
+      const modal=document.getElementById('rsvpModal');
+      modal.classList.remove('show');
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      const form=document.getElementById('rsvpForm');
+      const error=document.getElementById('rsvpError');
+
+      form.addEventListener('submit',async e=>{
+        e.preventDefault();
+        const nama=form.querySelector('input[type=text]').value.trim();
+        const jumlah=form.querySelector('input[type=number]').value.trim();
+        const status=form.querySelector('select').value;
+        const hp=form.querySelector('#hp_field').value.trim();
+
+        /* === Anti-Spam Check === */
+        if(hp !== ""){ return; }  /* bot detected */
+
+        if(nama==='' || jumlah==='' || jumlah<=0){
+          error.style.display='block';
+          return;
+        }
+        error.style.display='none';
+
+        const scriptURL = "PASTE_GOOGLE_APPS_SCRIPT_URL_HERE";
+        const data = new FormData();
+        data.append('timestamp', new Date().toISOString());
+        data.append('nama', nama);
+        data.append('jumlah', jumlah);
+        data.append('status', status);
+        data.append('userAgent', navigator.userAgent);
+
+        try{
+          await fetch(scriptURL, { method:'POST', body:data });
+          alert('Terima kasih! RSVP Anda berhasil dikirim.');
+          closeRSVP();
+          form.reset();
+        } catch(err){
+          alert('Gagal mengirim data. Coba lagi nanti.');
+        }
+      });('submit',async e=>{
+        e.preventDefault();
+        const nama=form.querySelector('input[type=text]').value.trim();
+        const jumlah=form.querySelector('input[type=number]').value.trim();
+        const status=form.querySelector('select').value;
+
+        if(nama==='' || jumlah==='' || jumlah<=0){
+          error.style.display='block';
+          return;
+        }
+        error.style.display='none';
+
+        const scriptURL = "PASTE_GOOGLE_APPS_SCRIPT_URL_HERE";
+        const data = new FormData();
+        data.append('nama', nama);
+        data.append('jumlah', jumlah);
+        data.append('status', status);
+
+        try{
+          await fetch(scriptURL, { method:'POST', body:data });
+          alert('Terima kasih! RSVP Anda berhasil dikirim.');
+          closeRSVP();
+          form.reset();
+        } catch(err){
+          alert('Gagal mengirim data. Coba lagi nanti.');
+        }
+      });('submit',e=>{
+        e.preventDefault();
+        const nama=form.querySelector('input[type=text]').value.trim();
+        const jumlah=form.querySelector('input[type=number]').value.trim();
+
+        if(nama==='' || jumlah==='' || jumlah<=0){
+          error.style.display='block';
+          return;
+        }
+
+        error.style.display='none';
+        alert('Terima kasih! Data RSVP Anda sudah tercatat.');
+        closeRSVP();
+        form.reset();
+      });
+    });
+    function buka() {
+      const op = document.querySelector('.opening');
+      op.style.animation = 'fadeOut 1s forwards';
+      setTimeout(() => op.style.display = 'none', 900);
+    }
+  </script>
 </head>
 <body>
 
-  <!-- OPENING (portrait small photo) -->
-  <div id="opening" class="opening">
-    <div class="opening-inner">
-      <div class="opening-photo">
-        <img src="assets/placeholder.svg" alt="Photo Mulki & Sarah">
-      </div>
-      <h1 class="opening-name">Mulki & Sarah</h1>
-      <p class="opening-date">25 Januari 2026</p>
-      <button id="openBtn" class="open-btn">Buka Undangan</button>
+  <!-- === OPENING MINIMALIS PORTRAIT === -->
+  <div class="opening">
+    <div class="opening-portrait">
+      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600" alt="Mulki & Sarah">
     </div>
+    <h1>Mulki & Sarah</h1>
+    <p>25 Januari 2026</p>
+    <button class="btn-open" onclick="buka()">Buka Undangan</button>
   </div>
 
-  <!-- MAIN (white minimalist, full-bleed) -->
-  <main id="main" class="hidden">
-    <header class="hero">
-      <div class="hero-inner">
-        <h1 class="hero-title">Mulki &amp; Sarah</h1>
-        <p class="hero-sub">Kami mengundang Anda untuk hadir pada hari bahagia kami</p>
-      </div>
-    </header>
 
-    <section class="section container">
-      <div class="card">
-        <h2 class="section-title">Detail Acara</h2>
-        <div class="event">
-          <p class="muted">Akad Nikah</p>
-          <p class="time">25 Januari 2026 — 07:00 WIB</p>
+  <!-- === MAIN CONTENT === -->
+  <div class="container">
 
-          <p class="muted" style="margin-top:18px">Resepsi</p>
-          <p class="time">11:00 — 14:00 WIB</p>
+    <h1 class="title-main">Mulki & Sarah</h1>
+    <p class="subtitle">Kami mengundang Anda untuk hadir di hari bahagia kami</p>
 
-          <p class="muted" style="margin-top:18px">Lokasi</p>
-          <p class="time">Gedung Joglo SKI — Bogor, Jawa Barat</p>
+    <div class="card">
+      <div class="section-title">Detail Acara</div>
 
-          <div class="map">
-            <iframe src="https://www.google.com/maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+      <div class="event">
+        <p>Akad Nikah</p>
+        <p>25 Januari 2026 — 07:00 WIB</p>
+
+        <p style="margin-top:20px">Resepsi</p>
+        <p>11:00 — 14:00 WIB</p>
+
+        <p style="margin-top:20px">Gedung Joglo SKI</p>
+        <p>Bogor, Jawa Barat</p>
+
+        <div class="map">
+          <iframe src="https://www.google.com/maps" loading="lazy"></iframe>
         </div>
       </div>
 
-      <div class="card" style="margin-top:32px">
-        <h2 class="section-title">Galeri</h2>
-        <div class="gallery">
-          <img src="assets/placeholder.svg" alt="gallery1">
-          <img src="assets/placeholder.svg" alt="gallery2">
-        </div>
+      <div class="section-title" style="margin-top:40px">Galeri</div>
+      <div class="gallery">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600" alt="">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" alt="">
       </div>
 
-      <div class="card" style="margin-top:32px; text-align:center">
-        <h2 class="section-title">RSVP</h2>
-        <p class="muted">Silakan konfirmasi kehadiran Anda melalui form berikut (popup).</p>
-        <button id="openRsvp" class="rsvp-btn">Buka Form RSVP</button>
-      </div>
-    </section>
-
-    <footer class="page-footer">
-      © Mulki & Sarah — 2026
-    </footer>
-  </main>
-
-  <!-- RSVP POPUP (medium) -->
-  <div id="rsvpPopup" class="popup" aria-hidden="true">
-    <div class="popup-inner" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
-      <button id="closeRsvp" class="popup-close" aria-label="Tutup">&times;</button>
-      <h3 id="rsvpTitle">Konfirmasi Kehadiran</h3>
-
-      <form id="rsvpForm" class="rsvp-form" autocomplete="off">
-        <!-- Honeypot -->
-        <input type="text" name="hp" id="hp" class="hp" tabindex="-1" autocomplete="off">
-
-        <!-- Anti-refresh token -->
-        <input type="hidden" name="token" id="token">
-
-        <label for="name">Nama lengkap</label>
-        <input id="name" name="name" type="text" required>
-
-        <label for="guests">Jumlah tamu</label>
-        <input id="guests" name="guests" type="number" min="1" required>
-
-        <label for="status">Status kehadiran</label>
-        <select id="status" name="status" required>
-          <option value="Hadir">Hadir</option>
-          <option value="Tidak Hadir">Tidak Hadir</option>
-        </select>
-
-        <div class="form-actions">
-          <button type="submit" id="submitBtn" class="submit">Kirim</button>
-        </div>
-
-        <p id="formError" class="form-error" role="alert" aria-live="assertive"></p>
-        <p id="formSuccess" class="form-success" role="status" aria-live="polite"></p>
-      </form>
     </div>
+
+    <div class="card" style="margin-top:60px">
+      <div class="section-title">RSVP</div>
+      <p style="text-align:center; opacity:0.8; font-size:15px; margin-bottom:20px">Silakan konfirmasi kehadiran Anda dengan mengisi form berikut:</p>
+      <div style="text-align:center">
+        <button class="btn-open" onclick="openRSVP()" style="padding:10px 26px; border-radius:40px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); color:var(--text-light); font-size:14px; cursor:pointer;">Buka Form RSVP</button>
+      </div>
+    </div>
+
+    <!-- === POPUP RSVP === -->
+    <div id="rsvpModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:9999; opacity:0; transition:opacity .4s ease; pointer-events:none;">
+      <div style="background:var(--maroon); padding:30px; border-radius:16px; width:90%; max-width:420px; border:1px solid rgba(255,255,255,0.15);">
+        <h2 style="margin-top:0; font-family:'Playfair Display', serif; text-align:center; font-size:26px;">Form RSVP</h2>
+        <p style="text-align:center; opacity:0.8; font-size:14px; margin-top:-5px;">Isi data kehadiran Anda</p>
+
+        <form id="rsvpForm">
+          <!-- Honeypot Anti-Spam -->
+          <input type="text" name="hp" id="hp_field" style="display:none !important; opacity:0; height:0;" tabindex="-1" autocomplete="off">
+          <label>Nama</label>
+          <input type="text" placeholder="Nama lengkap" style="width:100%; padding:10px; margin:8px 0 15px; border-radius:8px; border:none;">
+
+          <label>Jumlah Tamu</label>
+          <input type="number" placeholder="Jumlah orang" style="width:100%; padding:10px; margin:8px 0 15px; border-radius:8px; border:none;">
+
+          <label>Status Kehadiran</label>
+          <select style="width:100%; padding:10px; margin:8px 0 20px; border-radius:8px; border:none;">
+            <option>Hadir</option>
+            <option>Tidak Hadir</option>
+          </select>
+
+          <button type="submit" style="width:100%; padding:12px; border-radius:40px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:var(--text-light); cursor:pointer;">Kirim</button>
+        </form>
+        <p id="rsvpError" style="color:#ffb3b3; text-align:center; font-size:13px; display:none; margin-top:10px;">Harap isi semua data dengan benar.</p>
+
+        <button onclick="closeRSVP()" style="width:100%; margin-top:15px; padding:10px; background:none; border:none; color:#ccc; cursor:pointer;">Tutup</button>
+      </div>
+    </div>
+      <p style="text-align:center; opacity:0.8; font-size:15px; margin-bottom:20px">Silakan konfirmasi kehadiran Anda melalui tautan berikut:</p>
+      <div style="text-align:center">
+        <a href="#" class="btn-open" style="display:inline-block; text-decoration:none; padding:10px 26px; border-radius:40px; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); color:var(--text-light); font-size:14px;">Isi Form RSVP</a>
+      </div>
+    </div>
+
+    <footer>© Mulki & Sarah — 2026</footer>
+
   </div>
 
-  <script src="script.js"></script>
+<script>
+    function openRSVP(){ document.getElementById('rsvpModal').style.display='flex'; }
+    function closeRSVP(){ document.getElementById('rsvpModal').style.display='none'; }
+  </script>
 </body>
 </html>
